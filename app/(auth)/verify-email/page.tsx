@@ -37,14 +37,12 @@ export default function VerifyEmailPage() {
       </CardContent>
 
       <CardFooter className="flex flex-col gap-3">
-        <Button className="w-full" variant="outline" disabled>
-          Resend Verification Email
+        <Button className="w-full" variant="outline">
+          <Link href="/resend-verification">Resend Verification Email</Link>
         </Button>
 
-        <Button asChild variant="link">
-          <Link href="/sign-in">
-            Back to Sign In
-          </Link>
+        <Button variant="link">
+          <Link href="/sign-in">Back to Sign In</Link>
         </Button>
       </CardFooter>
     </Card>

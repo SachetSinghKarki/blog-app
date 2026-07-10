@@ -28,7 +28,7 @@ export default function EmailVerifiedPage() {
           You can now sign in and start sharing your thoughts with the world.
         </p>
 
-        <Button asChild className="w-full">
+        <Button  className="w-full">
           <Link href="/sign-in">Continue to Sign In</Link>
         </Button>
       </CardContent>

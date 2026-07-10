@@ -26,6 +26,8 @@ import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AuthDivider } from "./auth-divider";
+import { SocialLogin } from "./social-login";
 
 export function SignUpForm() {
   const router = useRouter()
@@ -154,6 +156,8 @@ export function SignUpForm() {
                 ? "Creating Account..."
                 : "Create Account"}
             </Button>
+            <AuthDivider/>
+            <SocialLogin/>
             <CardFooter className="justify-center">
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}

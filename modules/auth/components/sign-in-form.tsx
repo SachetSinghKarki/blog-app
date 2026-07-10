@@ -26,6 +26,8 @@ import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AuthDivider } from "./auth-divider";
+import { SocialLogin } from "./social-login";
 
 export function SignInForm() {
   const router = useRouter();
@@ -52,7 +54,10 @@ export function SignInForm() {
 
           onError: (ctx) => {
             if (ctx.error.status === 403) {
-              toast.error("Please verify your email before signing in.");
+              toast.error("Please verify your email first.");
+
+              router.push("/resend-verification");
+
               return;
             }
 
@@ -103,7 +108,16 @@ export function SignInForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Password</FieldLabel>
+                  <div className="flex items-center justify-between">
+                    <FieldLabel>Password</FieldLabel>
+
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm font-medium text-muted-foreground hover:text-primary hover:underline"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
 
                   <PasswordInput
                     {...field}
@@ -112,7 +126,6 @@ export function SignInForm() {
                     type="password"
                     aria-invalid={fieldState.invalid}
                   />
-
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -123,6 +136,8 @@ export function SignInForm() {
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
+            <AuthDivider />
+            <SocialLogin />
             <CardFooter className="justify-center">
               <p className="text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
