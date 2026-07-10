@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
-import { signUpSchema, type SignUpInput } from "../schemas/sign-up";
+import { signInSchema, type SignInInput } from "../schemas/sign-in";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -25,64 +25,58 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function SignInForm() {
-  const form = useForm<SignUpInput>({
-    resolver: zodResolver(signUpSchema),
+  const router = useRouter();
+  const form = useForm<SignInInput>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  async function onSubmit(data: SignUpInput) {
-    const { error } = await authClient.signUp.email({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    });
-    if (error) {
-      toast.error(error.message);
-      return;
+  async function onSubmit(data: SignInInput) {
+    try {
+      await authClient.signIn.email(
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onSuccess: () => {
+            toast.success("Signed in successfully.");
+            router.push("/");
+          },
+
+          onError: (ctx) => {
+            if (ctx.error.status === 403) {
+              toast.error("Please verify your email before signing in.");
+              return;
+            }
+
+            // Hide all credential-specific errors
+            toast.error("Invalid email or password.");
+          },
+        },
+      );
+    } catch {
+      toast.error("Something went wrong. Please try again.");
     }
-    toast.success("Account created successfully");
   }
 
   return (
     <Card className="mx-auto w-full max-w-md">
       <CardHeader>
-        <CardTitle>Create your account</CardTitle>
+        <CardTitle>Welcome back</CardTitle>
 
-        <CardDescription>
-          Enter your information to create an account.
-        </CardDescription>
+        <CardDescription>Sign in to continue to your account.</CardDescription>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Name</FieldLabel>
-
-                  <Input
-                    {...field}
-                    placeholder="John Doe"
-                    autoComplete="name"
-                    aria-invalid={fieldState.invalid}
-                  />
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
             <Controller
               name="email"
               control={form.control}
@@ -114,7 +108,7 @@ export function SignInForm() {
                   <PasswordInput
                     {...field}
                     placeholder="********"
-                    autoComplete="new-password"
+                    autoComplete="current-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
                   />
@@ -125,45 +119,22 @@ export function SignInForm() {
                 </Field>
               )}
             />
-            <Controller
-              name="confirmPassword"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Confirm Password</FieldLabel>
 
-                  <PasswordInput
-                    {...field}
-                    placeholder="********"
-                    autoComplete="new-password"
-                    type="password"
-                    aria-invalid={fieldState.invalid}
-                  />
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting
-                ? "Creating Account..."
-                : "Create Account"}
+              {form.formState.isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
             <CardFooter className="justify-center">
-            <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link
-                href="/sign-in"
-                className="font-medium text-primary hover:underline"
-              >
-                Sign In
-              </Link>
-            </p>
-          </CardFooter>
+              <p className="text-sm text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/sign-up"
+                  className="font-medium text-primary hover:underline"
+                >
+                  Sign Up
+                </Link>
+              </p>
+            </CardFooter>
           </FieldGroup>
-          
         </form>
       </CardContent>
     </Card>
