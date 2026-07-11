@@ -30,7 +30,10 @@ import { AuthDivider } from "./auth-divider";
 import { SocialLogin } from "./social-login";
 
 export function SignUpForm() {
-  const router = useRouter()
+  const router = useRouter();
+  const inputClassName =
+    "h-11 rounded-lg border-slate-200 bg-white/90 px-4 shadow-sm shadow-slate-200/50 placeholder:text-slate-400 focus-visible:border-slate-400 focus-visible:ring-slate-200";
+
   const form = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -52,31 +55,39 @@ export function SignUpForm() {
       return;
     }
     toast.success("Account created successfully");
-    router.push('/verify-email')
+    router.push("/verify-email");
   }
 
   return (
-    <Card className="mx-auto w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Create your account</CardTitle>
+    <Card className="mx-auto w-full max-w-[440px] rounded-lg border border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl [--card-spacing:--spacing(7)]">
+      <CardHeader className="gap-2 px-7 pt-7 text-center">
+        <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-sm font-semibold text-white shadow-lg shadow-slate-950/15">
+          B
+        </div>
+        <CardTitle className="text-2xl font-semibold text-slate-950">
+          Create your account
+        </CardTitle>
 
-        <CardDescription>
+        <CardDescription className="text-balance text-slate-500">
           Enter your information to create an account.
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-7 pb-7">
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
+          <FieldGroup className="gap-5">
             <Controller
               name="name"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Name</FieldLabel>
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel className="text-sm font-medium text-slate-700">
+                    Name
+                  </FieldLabel>
 
                   <Input
                     {...field}
+                    className={inputClassName}
                     placeholder="John Doe"
                     autoComplete="name"
                     aria-invalid={fieldState.invalid}
@@ -92,11 +103,14 @@ export function SignUpForm() {
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Email</FieldLabel>
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel className="text-sm font-medium text-slate-700">
+                    Email
+                  </FieldLabel>
 
                   <Input
                     {...field}
+                    className={inputClassName}
                     placeholder="johndoe@example.com"
                     type="email"
                     autoComplete="email"
@@ -113,11 +127,14 @@ export function SignUpForm() {
               name="password"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Password</FieldLabel>
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel className="text-sm font-medium text-slate-700">
+                    Password
+                  </FieldLabel>
 
                   <PasswordInput
                     {...field}
+                    className={inputClassName}
                     placeholder="********"
                     autoComplete="new-password"
                     type="password"
@@ -134,11 +151,14 @@ export function SignUpForm() {
               name="confirmPassword"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Confirm Password</FieldLabel>
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <FieldLabel className="text-sm font-medium text-slate-700">
+                    Confirm Password
+                  </FieldLabel>
 
                   <PasswordInput
                     {...field}
+                    className={inputClassName}
                     placeholder="********"
                     autoComplete="new-password"
                     type="password"
@@ -151,26 +171,29 @@ export function SignUpForm() {
                 </Field>
               )}
             />
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="h-11 w-full rounded-lg bg-slate-950 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 hover:bg-slate-800"
+            >
               {form.formState.isSubmitting
                 ? "Creating Account..."
                 : "Create Account"}
             </Button>
-            <AuthDivider/>
-            <SocialLogin/>
-            <CardFooter className="justify-center">
-            <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link
-                href="/sign-in"
-                className="font-medium text-primary hover:underline"
-              >
-                Sign In
-              </Link>
-            </p>
-          </CardFooter>
+            <AuthDivider />
+            <SocialLogin />
+            <CardFooter className="justify-center px-0 pb-0 pt-1">
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link
+                  href="/sign-in"
+                  className="font-medium text-slate-950 underline-offset-4 hover:underline"
+                >
+                  Sign In
+                </Link>
+              </p>
+            </CardFooter>
           </FieldGroup>
-          
         </form>
       </CardContent>
     </Card>

@@ -40,7 +40,7 @@ export function ResetPasswordForm() {
 
   const token = searchParams.get("token");
 
-  const form = useForm<ResetPasswordInput>({
+   const form = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       password: "",
@@ -48,8 +48,7 @@ export function ResetPasswordForm() {
     },
   });
 
-  async function onSubmit(data: ResetPasswordInput) {
-    if (!token) {
+  if (!token) {
       return (
         <Card>
           <CardHeader>
@@ -63,10 +62,13 @@ export function ResetPasswordForm() {
       );
     }
 
+ 
+
+  async function onSubmit(data: ResetPasswordInput) {
     await authClient.resetPassword(
       {
         newPassword: data.password,
-        token,
+        token:token!,
       },
       {
         onSuccess: () => {
