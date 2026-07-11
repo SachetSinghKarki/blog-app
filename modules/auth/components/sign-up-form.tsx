@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AuthDivider } from "./auth-divider";
 import { SocialLogin } from "./social-login";
@@ -61,8 +62,15 @@ export function SignUpForm() {
   return (
     <Card className="mx-auto w-full max-w-[440px] rounded-lg border border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl [--card-spacing:--spacing(7)]">
       <CardHeader className="gap-2 px-7 pt-7 text-center">
-        <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-slate-950 text-sm font-semibold text-white shadow-lg shadow-slate-950/15">
-          B
+        <div className="mx-auto mb-3 flex h-18 w-38 items-center justify-center rounded-lg border border-white/80 bg-white/90 px-4 shadow-lg shadow-slate-950/10 ring-1 ring-slate-950/5">
+          <Image
+            src="/logo.png"
+            alt="Mindspace"
+            width={553}
+            height={451}
+            priority
+            className="h-14 w-auto object-contain"
+          />
         </div>
         <CardTitle className="text-2xl font-semibold text-slate-950">
           Create your account
