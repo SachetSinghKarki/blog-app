@@ -6,14 +6,14 @@ export function SocialLogin() {
   async function signInWithGoogle() {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/dashboard",
     });
   }
 
   async function signInWithGithub() {
     await authClient.signIn.social({
       provider: "github",
-      callbackURL: "/",
+      callbackURL: "/dashboard",
     });
   }
   return (

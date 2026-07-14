@@ -60,7 +60,7 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-[440px] rounded-lg border border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl [--card-spacing:--spacing(7)]">
+    <Card className="mx-auto w-full max-w-110 rounded-lg border border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl [--card-spacing:--spacing(7)]">
       <CardHeader className="gap-2 px-7 pt-7 text-center">
         <div className="mx-auto mb-3 flex h-18 w-38 items-center justify-center rounded-lg border border-white/80 bg-white/90 px-4 shadow-lg shadow-slate-950/10 ring-1 ring-slate-950/5">
           <Image

@@ -23,6 +23,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  profile Profile?
   @@unique([email])
   @@map("user")
 }
@@ -73,4 +74,19 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Profile {
+  id String @id @default(cuid())
+  userId String @unique
+  user User @relation(fields:[userId], references: [id], onDelete: Cascade)
+  username String @unique
+  bio String?
+  website String?
+  location String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profile")
 }
