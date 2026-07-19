@@ -29,6 +29,12 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
+// trpc imports
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 export function OnboardingForm() {
   const inputClassName =
     "h-11 rounded-lg border-slate-200 bg-white/90 px-4 shadow-sm shadow-slate-200/50 placeholder:text-slate-400 focus-visible:border-slate-400 focus-visible:ring-slate-200";
@@ -43,10 +49,25 @@ export function OnboardingForm() {
     },
   });
 
-  async function onSubmit(data: CreateProfileInput) {
-    console.log(data);
+  const trpc = useTRPC();
+  const router = useRouter();
 
-    // We'll create the profile in the next step.
+  // creating the mutation
+  const createProfile = useMutation(
+    trpc.profile.create.mutationOptions({
+      onSuccess: async () => {
+        toast.success("Profile created successfully");
+        router.push("/dashboard");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }),
+  );
+
+  async function onSubmit(data: CreateProfileInput) {
+    // We'll create the profile
+    createProfile.mutate(data);
   }
 
   return (
@@ -173,10 +194,10 @@ export function OnboardingForm() {
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={createProfile.isPending}
               className="mt-2 h-11 w-full rounded-lg"
             >
-              Continue
+              {createProfile.isPending ? "Creating Profile..." : "Continue"}
             </Button>
           </FieldGroup>
         </form>

@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { AppNavbar } from "@/modules/dashboard/components/app-navbar";
 import { AppSidebar } from "@/modules/dashboard/components/app-sidebar";
 import { headers } from "next/headers";
@@ -16,6 +17,16 @@ export default async function DashboardLayout({
 
   if (!session) {
     redirect("/sign-in");
+  }
+
+  const profile = await prisma.profile.findUnique({
+    where: {
+      userId: session.user.id,
+    },
+  });
+
+  if (!profile) {
+    redirect("/onboarding");
   }
   return (
     <div className="flex h-screen">
